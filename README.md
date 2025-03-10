@@ -2,7 +2,7 @@ DEUS API CHALLENGE
 ====================================
 
 An API designed for managing clients, contracts, cargoes, tracking, and vessels in a shipping system using FastAPI
-SQLite database (local file)
+SQLite database (local file) with alembic to manage migrations
 Black package was used as a code linter.
 
 ## Run local environment
