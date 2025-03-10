@@ -1,17 +1,27 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Float, DateTime
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
 from datetime import datetime
-from sqlalchemy.orm import sessionmaker, relationship, Session
-
+from sqlalchemy.orm import relationship
 from core.database import Base
 
 
 class Tracking(Base):
+    """Represents a tracking entry, linking cargo to vessel locations."""
+
     __tablename__ = "tracking"
-    tracking_id = Column(Integer, primary_key=True, index=True)
-    cargo_id = Column(Integer, ForeignKey("cargoes.cargo_id"))
-    vessel_id = Column(Integer, ForeignKey("vessels.vessel_id"))
-    location = Column(String)
-    updated_at = Column(DateTime, default=datetime.utcnow)
-    status = Column(String)
-    cargo = relationship("Cargo", back_populates="tracking")
-    vessel = relationship("Vessel", back_populates="tracking")
+
+    tracking_id: int = Column(Integer, primary_key=True, index=True, autoincrement=True,
+                              doc="Unique identifier for the tracking entry.")
+    cargo_id: int = Column(Integer, ForeignKey("cargoes.cargo_id"), nullable=False,
+                           doc="Foreign key linking to the cargo being tracked.")
+    vessel_id: int | None = Column(Integer, ForeignKey("vessels.vessel_id"), nullable=False,
+                                   doc="Foreign key linking to the vessel carrying the cargo.")
+    location: str = Column(String, nullable=False, doc="Current location of the cargo.")
+    updated_at: datetime = Column(DateTime, default=datetime.utcnow, doc="Timestamp of the last update.")
+    status: str = Column(String, nullable=False, doc="Current status of the cargo.")
+
+    cargo = relationship("Cargo", back_populates="tracking", doc="Cargo associated with this tracking entry.")
+    vessel = relationship("Vessel", back_populates="tracking", doc="Vessel associated with this tracking entry.")
+
+    def __repr__(self) -> str:
+        """String representation of the Tracking model."""
+        return f"<Tracking(id={self.tracking_id}, location={self.location}, status={self.status})>"

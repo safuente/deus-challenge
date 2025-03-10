@@ -1,8 +1,8 @@
 """
 
-Revision ID: cf1d3e69cfdd
+Revision ID: 50178bb95cd4
 Revises: 
-Create Date: 2025-03-06 09:00:47.110062
+Create Date: 2025-03-07 13:24:17.496155
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = 'cf1d3e69cfdd'
+revision: str = '50178bb95cd4'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -40,13 +40,13 @@ def upgrade() -> None:
     op.create_index(op.f('ix_vessels_vessel_id'), 'vessels', ['vessel_id'], unique=False)
     op.create_table('contracts',
     sa.Column('contract_id', sa.Integer(), nullable=False),
-    sa.Column('client_id', sa.Integer(), nullable=True),
+    sa.Column('client_id', sa.Integer(), nullable=False),
     sa.Column('destination', sa.String(), nullable=True),
     sa.Column('price', sa.Float(), nullable=True),
     sa.Column('start_date', sa.DateTime(), nullable=True),
     sa.Column('end_date', sa.DateTime(), nullable=True),
     sa.Column('status', sa.String(), nullable=True),
-    sa.ForeignKeyConstraint(['client_id'], ['clients.client_id'], ),
+    sa.ForeignKeyConstraint(['client_id'], ['clients.client_id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('contract_id')
     )
     op.create_index(op.f('ix_contracts_contract_id'), 'contracts', ['contract_id'], unique=False)
@@ -55,9 +55,9 @@ def upgrade() -> None:
     sa.Column('description', sa.String(), nullable=True),
     sa.Column('weight', sa.Float(), nullable=True),
     sa.Column('volume', sa.Float(), nullable=True),
-    sa.Column('contract_id', sa.Integer(), nullable=True),
+    sa.Column('contract_id', sa.Integer(), nullable=False),
     sa.Column('status', sa.String(), nullable=True),
-    sa.ForeignKeyConstraint(['contract_id'], ['contracts.contract_id'], ),
+    sa.ForeignKeyConstraint(['contract_id'], ['contracts.contract_id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('cargo_id')
     )
     op.create_index(op.f('ix_cargoes_cargo_id'), 'cargoes', ['cargo_id'], unique=False)

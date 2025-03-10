@@ -31,7 +31,7 @@ pull:
 
 # Run unit tests locally
 test:
-	$(DOCKER_COMPOSE) exec app bash -c "python -m pytest"
+	$(DOCKER_COMPOSE) run --rm app bash -c "python -m pytest -vvs"
 
 # Run code linter
 lint:
