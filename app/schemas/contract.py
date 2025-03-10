@@ -5,6 +5,7 @@ from datetime import datetime
 
 class ContractBase(BaseModel):
     """Base schema for Contract, containing common attributes."""
+
     client_id: int
     destination: str
     price: float
@@ -15,11 +16,13 @@ class ContractBase(BaseModel):
 
 class ContractCreate(ContractBase):
     """Schema for creating a new Contract."""
+
     pass
 
 
 class ContractUpdate(BaseModel):
     """Schema for updating an existing Contract."""
+
     destination: Optional[str] = None
     price: Optional[float] = None
     start_date: Optional[datetime] = None
@@ -29,6 +32,7 @@ class ContractUpdate(BaseModel):
 
 class ContractResponse(ContractBase):
     """Schema for returning Contract data in API responses."""
+
     contract_id: int
 
     class Config:

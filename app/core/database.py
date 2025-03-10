@@ -8,7 +8,9 @@ DB_PATH: str = os.path.join("database.sqlite")
 SQLALCHEMY_DATABASE_URL: str = f"sqlite:///{DB_PATH}"
 
 # Create the database engine
-engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
+engine = create_engine(
+    SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
+)
 
 # Configure the session factory
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)

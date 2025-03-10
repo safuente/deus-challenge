@@ -8,5 +8,5 @@ router = BaseRouter(
     create_schema=VesselCreate,
     update_schema=VesselUpdate,
     response_schema=VesselResponse,
-    model_name="vessel"
+    model_name="vessel",
 ).router

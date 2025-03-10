@@ -11,13 +11,16 @@ class TestCargo:
         """
         Attempting to create a cargo with a non-existent contract_id should fail.
         """
-        response = client.post("/cargoes/", json={
-            "description": "Electronics",
-            "weight": 500.5,
-            "volume": 10.0,
-            "contract_id": 999,
-            "status": "pending"
-        })
+        response = client.post(
+            "/cargoes/",
+            json={
+                "description": "Electronics",
+                "weight": 500.5,
+                "volume": 10.0,
+                "contract_id": 999,
+                "status": "pending",
+            },
+        )
         assert response.status_code == 400
         assert response.json()["detail"] == "Contract ID 999 does not exist"
 
@@ -26,31 +29,36 @@ class TestCargo:
         Cargo should only be created if the contract_id exists.
         """
         # Create a valid client
-        client_response = client.post("/clients/", json={
-            "name": "John Doe",
-            "contact_info": "john@example.com"
-        })
+        client_response = client.post(
+            "/clients/", json={"name": "John Doe", "contact_info": "john@example.com"}
+        )
         assert client_response.status_code == 200
         client_id = client_response.json()["client_id"]
 
         # Create a valid contract first
-        contract_response = client.post("/contracts/", json={
-            "client_id": client_id,
-            "destination": "New York",
-            "price": 1000.0,
-            "status": "active"
-        })
+        contract_response = client.post(
+            "/contracts/",
+            json={
+                "client_id": client_id,
+                "destination": "New York",
+                "price": 1000.0,
+                "status": "active",
+            },
+        )
         assert contract_response.status_code == 200
         contract_id = contract_response.json()["contract_id"]
 
         # Create a cargo associated with the contract
-        cargo_response = client.post("/cargoes/", json={
-            "description": "Electronics",
-            "weight": 500.5,
-            "volume": 10.0,
-            "contract_id": contract_id,
-            "status": "pending"
-        })
+        cargo_response = client.post(
+            "/cargoes/",
+            json={
+                "description": "Electronics",
+                "weight": 500.5,
+                "volume": 10.0,
+                "contract_id": contract_id,
+                "status": "pending",
+            },
+        )
         assert cargo_response.status_code == 200
         assert "cargo_id" in cargo_response.json()
 
@@ -74,7 +82,7 @@ class TestCargo:
         """
         response = client.put("/cargoes/1", json={"status": "shipped"})
         assert "shipped" in response.text
-        assert response.status_code ==200
+        assert response.status_code == 200
 
     def test_delete_cargo(self, client: TestClient) -> None:
         """

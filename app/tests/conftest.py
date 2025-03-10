@@ -17,6 +17,7 @@ engine = create_engine(
 
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
+
 @pytest.fixture(scope="session")
 def setup_database() -> Generator[None, None, None]:
     """Creates the local SQLite database before tests and removes it after."""
@@ -27,6 +28,7 @@ def setup_database() -> Generator[None, None, None]:
     if os.path.exists(db_path):
         os.remove(db_path)
 
+
 @pytest.fixture(scope="function")
 def db_session() -> Generator[Session, None, None]:
     """Provides a fresh database session for each test."""
@@ -35,15 +37,21 @@ def db_session() -> Generator[Session, None, None]:
     session.rollback()
     session.close()
 
+
 @pytest.fixture(scope="function")
 def override_get_db(db_session: Session) -> Generator:
     """Replaces the get_db() dependency with the file-based SQLite session."""
+
     def _get_db() -> Generator[Session, None, None]:
         yield db_session
+
     return _get_db
 
+
 @pytest.fixture(scope="function")
-def client(setup_database: None, override_get_db: Generator) -> Generator[TestClient, None, None]:
+def client(
+    setup_database: None, override_get_db: Generator
+) -> Generator[TestClient, None, None]:
     """Creates a test client with the configured SQLite database."""
     app.dependency_overrides[get_db] = override_get_db
     with TestClient(app) as c:

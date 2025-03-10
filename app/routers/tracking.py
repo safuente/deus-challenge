@@ -8,5 +8,5 @@ router = BaseRouter(
     create_schema=TrackingCreate,
     update_schema=TrackingUpdate,
     response_schema=TrackingResponse,
-    model_name="tracking"
+    model_name="tracking",
 ).router

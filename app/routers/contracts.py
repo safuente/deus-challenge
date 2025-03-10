@@ -8,5 +8,5 @@ router = BaseRouter(
     create_schema=ContractCreate,
     update_schema=ContractUpdate,
     response_schema=ContractResponse,
-    model_name="contract"
+    model_name="contract",
 ).router

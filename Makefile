@@ -33,9 +33,9 @@ pull:
 test:
 	$(DOCKER_COMPOSE) run --rm app bash -c "python -m pytest -vvs"
 
-# Run code linter
+# Run code linter (Black)
 lint:
-	$(DOCKER_COMPOSE) run --rm app flake8
+	$(DOCKER_COMPOSE) run --rm app black .
 
 # Access to container bash
 bash:

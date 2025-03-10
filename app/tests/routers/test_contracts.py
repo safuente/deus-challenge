@@ -1,5 +1,6 @@
 from fastapi.testclient import TestClient
 
+
 class TestContract:
     """
     Test suite for the Contract API endpoints.
@@ -10,12 +11,15 @@ class TestContract:
         """
         Attempting to create a contract with a non-existent client_id should fail.
         """
-        response = client.post("/contracts/", json={
-            "client_id": 999,
-            "destination": "Madrid",
-            "price": 2000.0,
-            "status": "active"
-        })
+        response = client.post(
+            "/contracts/",
+            json={
+                "client_id": 999,
+                "destination": "Madrid",
+                "price": 2000.0,
+                "status": "active",
+            },
+        )
         assert response.status_code == 400
         assert response.json()["detail"] == "Client ID 999 does not exist"
 
@@ -24,20 +28,22 @@ class TestContract:
         A contract should only be created if the client_id exists.
         """
         # Create a valid client first
-        client_response = client.post("/clients/", json={
-            "name": "John Doe",
-            "contact_info": "john@example.com"
-        })
+        client_response = client.post(
+            "/clients/", json={"name": "John Doe", "contact_info": "john@example.com"}
+        )
         assert client_response.status_code == 200
         client_id = client_response.json()["client_id"]
 
         # Create a contract associated with the client
-        contract_response = client.post("/contracts/", json={
-            "client_id": client_id,
-            "destination": "Madrid",
-            "price": 2000.0,
-            "status": "active"
-        })
+        contract_response = client.post(
+            "/contracts/",
+            json={
+                "client_id": client_id,
+                "destination": "Madrid",
+                "price": 2000.0,
+                "status": "active",
+            },
+        )
         assert contract_response.status_code == 200
         assert "contract_id" in contract_response.json()
 

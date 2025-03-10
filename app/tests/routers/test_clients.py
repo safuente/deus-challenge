@@ -11,13 +11,16 @@ class TestCargo:
         """
         Attempting to create a cargo with a non-existent contract_id should fail.
         """
-        response = client.post("/cargoes/", json={
-            "description": "Electronics",
-            "weight": 500.5,
-            "volume": 10.0,
-            "contract_id": 999,
-            "status": "pending"
-        })
+        response = client.post(
+            "/cargoes/",
+            json={
+                "description": "Electronics",
+                "weight": 500.5,
+                "volume": 10.0,
+                "contract_id": 999,
+                "status": "pending",
+            },
+        )
         assert response.status_code == 400
         assert response.json()["detail"] == "Contract ID 999 does not exist"
 
@@ -26,31 +29,38 @@ class TestCargo:
         Cargo should only be created if the contract_id exists.
         """
         # Create a valid client
-        client_response = client.post("/clients/", json={
-            "name": "John Doe",
-            "contact_info": "john@example.com"
-        })
-        assert client_response.status_code == 200, client_response.text  # Debugging output
+        client_response = client.post(
+            "/clients/", json={"name": "John Doe", "contact_info": "john@example.com"}
+        )
+        assert (
+            client_response.status_code == 200
+        ), client_response.text  # Debugging output
         client_id = client_response.json()["client_id"]
 
         # Create a valid contract first
-        contract_response = client.post("/contracts/", json={
-            "client_id": client_id,
-            "destination": "New York",
-            "price": 1000.0,
-            "status": "active"
-        })
+        contract_response = client.post(
+            "/contracts/",
+            json={
+                "client_id": client_id,
+                "destination": "New York",
+                "price": 1000.0,
+                "status": "active",
+            },
+        )
         assert contract_response.status_code == 200
         contract_id = contract_response.json()["contract_id"]
 
         # Create a cargo associated with the contract
-        cargo_response = client.post("/cargoes/", json={
-            "description": "Electronics",
-            "weight": 500.5,
-            "volume": 10.0,
-            "contract_id": contract_id,
-            "status": "pending"
-        })
+        cargo_response = client.post(
+            "/cargoes/",
+            json={
+                "description": "Electronics",
+                "weight": 500.5,
+                "volume": 10.0,
+                "contract_id": contract_id,
+                "status": "pending",
+            },
+        )
         assert cargo_response.status_code == 200
         assert "cargo_id" in cargo_response.json()
 
@@ -93,10 +103,9 @@ class TestClients:
         """
         Create a new client and verify the response contains a valid client ID.
         """
-        response = client.post("/clients/", json={
-            "name": "John Doe",
-            "contact_info": "john@example.com"
-        })
+        response = client.post(
+            "/clients/", json={"name": "John Doe", "contact_info": "john@example.com"}
+        )
         assert response.status_code == 200
         assert "client_id" in response.json()
 
@@ -118,11 +127,15 @@ class TestClients:
         """
         Update a client’s information and verify the response contains the updated details.
         """
-        response = client.put("/clients/1", json={"name": "Jane Doe", "contact_info": "st unknown 2"})
+        response = client.put(
+            "/clients/1", json={"name": "Jane Doe", "contact_info": "st unknown 2"}
+        )
         assert "st unknown 2" in response.text
         assert response.status_code == 200
 
-    def test_prevent_delete_client_with_active_contract(self, client: TestClient) -> None:
+    def test_prevent_delete_client_with_active_contract(
+        self, client: TestClient
+    ) -> None:
         """
         Attempt to delete a client with an active contract should return a 400 status code.
         """
@@ -133,10 +146,9 @@ class TestClients:
         """
         Create and delete a client, verifying a successful deletion with a 200 status code.
         """
-        client_response = client.post("/clients/", json={
-            "name": "John Doe",
-            "contact_info": "john@example.com"
-        })
+        client_response = client.post(
+            "/clients/", json={"name": "John Doe", "contact_info": "john@example.com"}
+        )
         client_id = client_response.json()["client_id"]
         response = client.delete(f"/clients/{client_id}")
         assert response.status_code == 200

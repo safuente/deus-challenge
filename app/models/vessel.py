@@ -8,13 +8,26 @@ class Vessel(Base):
 
     __tablename__ = "vessels"
 
-    vessel_id: int = Column(Integer, primary_key=True, index=True, autoincrement=True,
-                            doc="Unique identifier for the vessel.")
+    vessel_id: int = Column(
+        Integer,
+        primary_key=True,
+        index=True,
+        autoincrement=True,
+        doc="Unique identifier for the vessel.",
+    )
     name: str = Column(String, index=True, nullable=False, doc="Name of the vessel.")
-    capacity: float = Column(Float, nullable=False, doc="Capacity of the vessel in metric tons.")
-    current_location: str = Column(String, nullable=False, doc="Current location of the vessel.")
+    capacity: float = Column(
+        Float, nullable=False, doc="Capacity of the vessel in metric tons."
+    )
+    current_location: str = Column(
+        String, nullable=False, doc="Current location of the vessel."
+    )
 
-    tracking = relationship("Tracking", back_populates="vessel", doc="Tracking entries associated with this vessel.")
+    tracking = relationship(
+        "Tracking",
+        back_populates="vessel",
+        doc="Tracking entries associated with this vessel.",
+    )
 
     def __repr__(self) -> str:
         """String representation of the Vessel model."""

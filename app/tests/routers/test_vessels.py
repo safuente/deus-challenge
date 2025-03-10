@@ -1,14 +1,18 @@
 from typing import Any
 from fastapi.testclient import TestClient
 
+
 class TestVessel:
     def test_create_vessel(self, client: TestClient) -> None:
         """A vessel should be created successfully."""
-        response = client.post("/vessels/", json={
-            "name": "Ocean Explorer",
-            "capacity": 10000.0,
-            "current_location": "Port of Rotterdam"
-        })
+        response = client.post(
+            "/vessels/",
+            json={
+                "name": "Ocean Explorer",
+                "capacity": 10000.0,
+                "current_location": "Port of Rotterdam",
+            },
+        )
         assert response.status_code == 200
         assert "vessel_id" in response.json()
 
@@ -24,7 +28,9 @@ class TestVessel:
 
     def test_update_vessel(self, client: TestClient) -> None:
         """Update a vessel's current location."""
-        response = client.put("/vessels/1", json={"current_location": "Port of Singapore"})
+        response = client.put(
+            "/vessels/1", json={"current_location": "Port of Singapore"}
+        )
         assert "Port of Singapore" in response.text
         assert response.status_code == 200
 

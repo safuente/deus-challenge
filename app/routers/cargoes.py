@@ -8,5 +8,5 @@ router = BaseRouter(
     create_schema=CargoCreate,
     update_schema=CargoUpdate,
     response_schema=CargoResponse,
-    model_name="cargo"
+    model_name="cargo",
 ).router

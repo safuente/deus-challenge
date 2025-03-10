@@ -8,5 +8,5 @@ router = BaseRouter(
     create_schema=ClientCreate,
     update_schema=ClientUpdate,
     response_schema=ClientResponse,
-    model_name="client"
+    model_name="client",
 ).router

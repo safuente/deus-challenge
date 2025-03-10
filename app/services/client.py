@@ -11,8 +11,12 @@ class ClientService(BaseService):
 
     def delete_item(self, item_id: int) -> dict[str, str]:
         """Prevents deletion if the client has associated contracts."""
-        existing_contracts: Contract | None = self.db.query(Contract).filter(Contract.client_id == item_id).first()
+        existing_contracts: Contract | None = (
+            self.db.query(Contract).filter(Contract.client_id == item_id).first()
+        )
         if existing_contracts:
-            raise HTTPException(status_code=400, detail="Cannot delete client with active contracts")
+            raise HTTPException(
+                status_code=400, detail="Cannot delete client with active contracts"
+            )
 
         return super().delete_item(item_id)
