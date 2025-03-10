@@ -41,9 +41,7 @@ class TestClient:
         assert "st unknown 2" in response.text
         assert response.status_code == 200
 
-    def test_prevent_delete_client_with_active_contract(
-        self, client: TC
-    ) -> None:
+    def test_prevent_delete_client_with_active_contract(self, client: TC) -> None:
         """
         Attempt to delete a client with an active contract should return a 400 status code.
         """

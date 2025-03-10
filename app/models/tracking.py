@@ -4,10 +4,12 @@ from sqlalchemy.orm import relationship
 from core.database import Base
 import enum
 
+
 class TrackingStatus(str, enum.Enum):
     PENDING = "pending"
     IN_TRANSIT = "in transit"
     DELIVERED = "delivered"
+
 
 class Tracking(Base):
     """Represents a tracking entry, linking cargo to vessel locations."""
