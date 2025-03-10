@@ -56,7 +56,7 @@ class TestContract:
 
     def test_list_contracts(self, client: TestClient) -> None:
         """
-        List all contract records. The response should return status code 200.
+        List all contract records.
         """
         response = client.get("/contracts/")
         assert response.status_code == 200
