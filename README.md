@@ -3,7 +3,7 @@ DEUS API CHALLENGE
 
 * An API designed for managing clients, contracts, cargoes, tracking, and vessels in a shipping system using FastAPI
 * SQLite database (local file) with alembic to manage migrations
-* Black package was used as a code linter.
+* Black package was used as a code linter
 * Docker is needed to run the app (please use Docker Desktop or Rancher Desktop)
 
 ## Run local environment
