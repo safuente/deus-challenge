@@ -2,6 +2,8 @@ from pydantic import BaseModel
 from typing import Optional
 from datetime import datetime
 
+from models.tracking import TrackingStatus
+
 
 class TrackingBase(BaseModel):
     """Base schema for Tracking, containing common attributes."""
@@ -10,7 +12,7 @@ class TrackingBase(BaseModel):
     vessel_id: Optional[int] = None
     location: str
     updated_at: Optional[datetime] = None
-    status: str
+    status: Optional[TrackingStatus] = None
 
 
 class TrackingCreate(TrackingBase):
@@ -24,7 +26,7 @@ class TrackingUpdate(BaseModel):
 
     location: Optional[str] = None
     updated_at: Optional[datetime] = None
-    status: Optional[str] = None
+    status: Optional[TrackingStatus] = None
 
 
 class TrackingResponse(TrackingBase):

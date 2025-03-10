@@ -1,8 +1,13 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Enum as SAEnum
 from datetime import datetime
 from sqlalchemy.orm import relationship
 from core.database import Base
+import enum
 
+class TrackingStatus(str, enum.Enum):
+    PENDING = "pending"
+    IN_TRANSIT = "in transit"
+    DELIVERED = "delivered"
 
 class Tracking(Base):
     """Represents a tracking entry, linking cargo to vessel locations."""
@@ -32,7 +37,12 @@ class Tracking(Base):
     updated_at: datetime = Column(
         DateTime, default=datetime.utcnow, doc="Timestamp of the last update."
     )
-    status: str = Column(String, nullable=False, doc="Current status of the cargo.")
+    status: TrackingStatus = Column(
+        SAEnum(TrackingStatus),
+        nullable=False,
+        default=TrackingStatus.PENDING,
+        doc="Current status of the cargo.",
+    )
 
     cargo = relationship(
         "Cargo",

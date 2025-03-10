@@ -1,13 +1,13 @@
-from fastapi.testclient import TestClient
+from fastapi.testclient import TestClient as TC
 
 
-class TestClients:
+class TestClient:
     """
     Test suite for the Client API endpoints.
     This class contains tests for creating, retrieving, listing, updating, and deleting client records.
     """
 
-    def test_create_client(self, client: TestClient) -> None:
+    def test_create_client(self, client: TC) -> None:
         """
         Create a new client and verify the response contains a valid client ID.
         """
@@ -17,21 +17,21 @@ class TestClients:
         assert response.status_code == 200
         assert "client_id" in response.json()
 
-    def test_get_client(self, client: TestClient) -> None:
+    def test_get_client(self, client: TC) -> None:
         """
         Retrieve a client by its ID.
         """
         response = client.get("/clients/1")
         assert response.status_code == 200
 
-    def test_list_clients(self, client: TestClient) -> None:
+    def test_list_clients(self, client: TC) -> None:
         """
         List all client records.
         """
         response = client.get("/clients/")
         assert response.status_code == 200
 
-    def test_update_client(self, client: TestClient) -> None:
+    def test_update_client(self, client: TC) -> None:
         """
         Update a client’s information and verify the response contains the updated details.
         """
@@ -42,7 +42,7 @@ class TestClients:
         assert response.status_code == 200
 
     def test_prevent_delete_client_with_active_contract(
-        self, client: TestClient
+        self, client: TC
     ) -> None:
         """
         Attempt to delete a client with an active contract should return a 400 status code.
@@ -50,7 +50,7 @@ class TestClients:
         response = client.delete("/clients/1")
         assert response.status_code == 400
 
-    def test_delete_client(self, client: TestClient) -> None:
+    def test_delete_client(self, client: TC) -> None:
         """
         Create and delete a client, verifying a successful deletion with a 200 status code.
         """

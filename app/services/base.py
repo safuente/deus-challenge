@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from fastapi import HTTPException
 from sqlalchemy.sql import text
 from pydantic import BaseModel
+from core.logger import logger
 
 ModelType = TypeVar("ModelType")
 
@@ -12,6 +13,7 @@ class BaseService:
         """Initialize the service with a database session and a model."""
         self.db = db
         self.model = model
+        logger.info(f"Service initialized for model {self.model.__name__}")
 
     def create_item(self, item_data: BaseModel) -> ModelType:
         """Create a new item in the database."""
@@ -19,6 +21,9 @@ class BaseService:
         self.db.add(item)
         self.db.commit()
         self.db.refresh(item)
+        logger.info(
+            f"Created {self.model.__name__} with ID {getattr(item, f'{self.model.__name__.lower()}_id')}"
+        )
         return item
 
     def list_items(self, order_by: str | None = None) -> List[ModelType]:
@@ -28,7 +33,9 @@ class BaseService:
             if order_by is None
             else text(order_by)
         )
-        return self.db.query(self.model).order_by(order_by).all()
+        items = self.db.query(self.model).order_by(order_by).all()
+        logger.info(f"Retrieved {len(items)} {self.model.__name__}(s)")
+        return items
 
     def get_item(self, item_id: int) -> ModelType:
         """Retrieve a single item by its ID."""
@@ -39,6 +46,7 @@ class BaseService:
                 status_code=404,
                 detail=f"{self.model.__name__} with ID {item_id} not found",
             )
+        logger.info(f"Retrieved {self.model.__name__} with ID {item_id}")
         return item
 
     def update_item(self, item_id: int, item_data: BaseModel) -> ModelType:
@@ -49,6 +57,7 @@ class BaseService:
             .first()
         )
         if not item:
+            logger.warning(f"{self.model.__name__} with ID {item_id} not found")
             raise HTTPException(
                 status_code=404,
                 detail=f"{self.model.__name__} with ID {item_id} not found",
@@ -69,6 +78,9 @@ class BaseService:
             .first()
         )
         if not item:
+            logger.warning(
+                f"{self.model.__name__} with ID {item_id} not found for deletion"
+            )
             raise HTTPException(
                 status_code=404,
                 detail=f"{self.model.__name__} with ID {item_id} not found",
@@ -76,7 +88,7 @@ class BaseService:
 
         self.db.delete(item)
         self.db.commit()
-
+        logger.info(f"Deleted {self.model.__name__} with ID {item_id}")
         return {
             "message": f"{self.model.__name__} with ID {item_id} deleted successfully"
         }
